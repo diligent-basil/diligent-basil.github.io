@@ -5,113 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Konfiguracji</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; background-color: #f4f7f6; color: #333; }
-        .form-group { margin-bottom: 15px; }
-        .form-group.checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        .checkbox-group label { display: inline; margin-bottom: 0; cursor: pointer; }
-        input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 760px; margin: 24px auto; padding: 16px; background-color: #f4f7f6; color: #333; }
+        h2 { margin-bottom: 14px; }
+        .section { background: #fff; border: 1px solid #e1e6ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .section-title { font-size: 14px; font-weight: 700; color: #2b579a; margin: 0; }
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+        .form-group { margin-bottom: 0; }
+        .form-group.checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .options-group { margin-bottom: 14px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; }
+        .checkbox-group label { display: inline; margin-bottom: 0; cursor: pointer; font-weight: 600; }
+        input[type="text"], textarea { width: 100%; padding: 9px 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-        .output-box { margin-top: 25px; padding: 15px; background-color: #eef2f7; border-left: 5px solid #2b579a; border-radius: 4px; }
-        textarea { width: 100%; height: 80px; margin-top: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-family: monospace; font-size: 15px; resize: none; background-color: #fff; }
+        .output-box { margin-top: 18px; padding: 14px; background-color: #eef2f7; border-left: 5px solid #2b579a; border-radius: 4px; }
+        .output-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .output-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .copy-btn, .mail-btn, .clear-btn { padding: 7px 10px; border: none; border-radius: 4px; color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .copy-btn { background: #2b579a; }
+        .copy-btn:hover { background: #244982; }
+        .mail-btn { background: #2d8a34; }
+        .mail-btn:hover { background: #246d29; }
+        .clear-btn { background: #a33; }
+        .clear-btn:hover { background: #8b2a2a; }
+        .copy-btn:active, .mail-btn:active, .clear-btn:active { transform: translateY(1px); }
+        .section-spacer { height: 10px; }
+        textarea { width: 100%; height: auto; min-height: 54px; margin-top: 8px; padding: 10px; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-family: monospace; font-size: 14px; resize: none; background-color: #fff; overflow: hidden; line-height: 1.35; }
+        textarea.editable { resize: vertical; overflow: auto; min-height: 150px; }
         .hint { font-size: 12px; color: #666; margin-top: 2px; }
+        .full { grid-column: 1 / -1; }
+        @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .output-header { flex-direction: column; align-items: flex-start; } .section-header { align-items: flex-start; flex-direction: column; } }
     </style>
 </head>
 <body>
 
-    <h2>📋 Formularz Konfiguracji</h2>
-    
-    <div class="form-group">
-        <label for="rest_name">Nazwa restauracji</label>
-        <input type="text" id="rest_name" placeholder="Wpisz nazwę...">
+    <h2>Helper Konfiguracji</h2>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Dane podstawowe</div>
+            <button class="clear-btn" type="button" title="Nazwy kampanii dodane do maila zostaną zachowane" onclick="clearFields()">Wyczyść pola</button>
+        </div>
+        <div class="grid">
+            <div class="form-group full">
+                <label for="rest_name">Nazwa restauracji</label>
+                <input type="text" id="rest_name" placeholder="Wklej nazwę">
+            </div>
+            <div class="form-group">
+                <label for="client_id">ID Konta</label>
+                <input type="text" id="client_id" placeholder="123">
+            </div>
+            <div class="form-group">
+                <label for="loc_id">ID Lokalizacji</label>
+                <input type="text" id="loc_id" placeholder="456">
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefon do restauracji</label>
+                <input type="text" id="phone" placeholder="AAAAAAAAA">
+            </div>
+            <div class="form-group">
+                <label for="campaign">Nr. kampanii Weylo</label>
+                <input type="text" id="campaign" placeholder="BBBBBBBBB">
+            </div>
+            <div class="form-group">
+                <label for="sim">Nr. karty SIM</label>
+                <input type="text" id="sim" placeholder="CCCCCCCCC">
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="client_id">ID Klienta (Konto)</label>
-        <input type="text" id="client_id" placeholder="np. 123">
+    <div class="section options-group">
+        <div class="section-title">Opcje</div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="recording" checked>
+            <label for="recording">Nagrywanie rozmów</label>
+        </div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="esim">
+            <label for="esim">E-SIM</label>
+        </div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="queue">
+            <label for="queue">Kolejka</label>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="loc_id">ID Lokalizacji</label>
-        <input type="text" id="loc_id" placeholder="np. 456">
-    </div>
-
-    <div class="form-group">
-        <label for="phone">Telefon do restauracji</label>
-        <input type="text" id="phone" placeholder="AAAAAAAAA">
-    </div>
-
-    <div class="form-group">
-        <label for="campaign">Nr. kampanii Weylo</label>
-        <input type="text" id="campaign" placeholder="BBBBBBBBB">
-    </div>
-
-    <div class="form-group">
-        <label for="sim">Nr. karty SIM</label>
-        <input type="text" id="sim" placeholder="CCCCCCCCC">
-    </div>
-
-    <div class="form-group checkbox-group">
-        <input type="checkbox" id="recording" checked>
-        <label for="recording">Nagrywanie rozmów (Zaznaczone = NR / Odznaczone = BNR)</label>
-    </div>
-
-    <div class="form-group checkbox-group">
-        <input type="checkbox" id="esim">
-        <label for="esim">E-SIM (dopisuje esim)</label>
-    </div>
-
-    <div class="form-group checkbox-group">
-        <input type="checkbox" id="queue">
-        <label for="queue">Kolejka (dopisuje k)</label>
-    </div>
-
-    <!-- Wyjściowy Textbox na żywo -->
     <div class="output-box">
-        <label for="output_text">Wygenerowany ciąg znaków:</label>
-        <textarea id="output_text" readonly></textarea>
+        <div class="output-header">
+            <label for="output_code">Nazwa kampanii:</label>
+            <div class="output-actions">
+                <button class="mail-btn" type="button" onclick="addToMail()">Dodaj do maila</button>
+                <button class="copy-btn" type="button" onclick="copyText('output_code', this)">Kopiuj</button>
+            </div>
+        </div>
+        <textarea id="output_code" readonly></textarea>
         <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
     </div>
 
+    <div class="output-box">
+        <div class="output-header">
+            <label for="output_tone">Tekst wyboru tonowego:</label>
+            <button class="copy-btn" type="button" onclick="copyText('output_tone', this)">Kopiuj</button>
+        </div>
+        <textarea id="output_tone" readonly></textarea>
+        <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Mail</div>
+            <button class="copy-btn" type="button" onclick="copyText('output_mail', this)">Kopiuj</button>
+        </div>
+        <textarea id="output_mail" class="editable"></textarea>
+        <div class="hint">Mail jest edytowalny, a dodane nazwy kampanii zostają zachowane.</div>
+    </div>
+
     <script>
-        // Funkcja generująca ciąg znaków w czasie rzeczywistym
+        let preservedEmailNames = [];
+
         function updateText() {
-            // Pobranie wartości z pól
+            const restName = document.getElementById('rest_name').value.trim() || '[Nazwa Restauracji]';
             const clientId = document.getElementById('client_id').value.trim() || 'X';
             const locId = document.getElementById('loc_id').value.trim() || 'Y';
             const phone = document.getElementById('phone').value.trim() || 'AAAAAAAAA';
             const campaign = document.getElementById('campaign').value.trim() || 'BBBBBBBBB';
             const sim = document.getElementById('sim').value.trim() || 'CCCCCCCCC';
-            
-            // Logika checkboxów
-            const isRecording = document.getElementById('recording').checked;
-            const recPrefix = isRecording ? "-NR" : "-BNR";
-            
-            const isEsim = document.getElementById('esim').checked;
-            const esimText = isEsim ? " esim" : "";
-            
-            const isQueue = document.getElementById('queue').checked;
-            const queueText = isQueue ? " k" : "";
+            const recPrefix = document.getElementById('recording').checked ? ' NR' : ' BNR';
+            const esimText = document.getElementById('esim').checked ? ' esim' : '';
+            const queueText = document.getElementById('queue').checked ? ' K' : '';
 
-            // Składanie finalnego ciągu: K`X` L`Y` NR `AAAAAAAAA`-`BBBBBBBBB`-`CCCCCCCCC` g h
-            // (Zastosowano spacje przed zmiennymi g i h zgodnie ze wzorem)
-            const result = `K${clientId} L${locId}${recPrefix} ${phone}-${campaign}-${sim}${esimText}${queueText}`;
-            
-            // Wstrzyknięcie tekstu do textarea
-            document.getElementById('output_text').value = result;
+            document.getElementById('output_code').value = `K${clientId} L${locId}${recPrefix} ${phone}-${campaign}-${sim}${esimText}${queueText}`;
+            document.getElementById('output_tone').value = `Witamy w restauracji ${restName}.\nJeżeli chcesz zamówić online, wybierz jeden<break time="0.5s"/>, a jeżeli chcesz porozmawiać z nami...?, wybierz dwa.`;
+            updateMailOutput();
+            autoResize(document.getElementById('output_code'));
+            autoResize(document.getElementById('output_tone'));
+            autoResize(document.getElementById('output_mail'));
         }
 
-        // Lista wszystkich ID elementów formularza do nasłuchiwania zmian
-        const inputIds = ['client_id', 'loc_id', 'phone', 'campaign', 'sim', 'recording', 'esim', 'queue'];
+        function updateMailOutput() {
+            const intro = preservedEmailNames.length === 1
+                ? 'Proszę dla kampanii z poniższą nazwą ustawić przekazywanie numeru źródłowego'
+                : 'Proszę dla kampanii z poniższymi nazwami ustawić przekazywanie numeru źródłowego';
 
-        // Podpięcie zdarzeń 'input' (dla text) i 'change' (dla checkboxów) pod każdy element
+            const body = [
+                'Dzień dobry',
+                '',
+                intro,
+                '',
+                ...preservedEmailNames,
+                '',
+                'Pozdrawiam,'
+            ].join('\n').replace(/\n{3,}/g, '\n\n').trimEnd();
+
+            const mailBox = document.getElementById('output_mail');
+            if (mailBox.value.trim() === '' || mailBox.value === mailBox.dataset.generatedValue) {
+                mailBox.value = body;
+            }
+            mailBox.dataset.generatedValue = body;
+            autoResize(mailBox);
+        }
+
+        function addToMail() {
+            const campaignName = document.getElementById('output_code').value.trim();
+            if (!campaignName) return;
+            if (!preservedEmailNames.includes(campaignName)) preservedEmailNames.push(campaignName);
+            updateMailOutput();
+        }
+
+        function clearFields() {
+            ['rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            ['recording', 'esim', 'queue'].forEach(id => {
+                document.getElementById(id).checked = id === 'recording';
+            });
+            updateText();
+        }
+
+        function autoResize(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+
+        function copyText(id, button) {
+            const text = document.getElementById(id).value;
+            const textarea = document.getElementById(id);
+            textarea.focus();
+            textarea.select();
+            let success = false;
+            try { success = document.execCommand('copy'); } catch (e) { success = false; }
+            if (!success && navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+                success = true;
+            }
+            const old = button.textContent;
+            button.textContent = success ? 'Skopiowano' : 'Nie udało się';
+            setTimeout(() => button.textContent = old, 1000);
+            window.getSelection().removeAllRanges();
+            textarea.blur();
+        }
+
+        const inputIds = ['rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim', 'recording', 'esim', 'queue'];
         inputIds.forEach(id => {
             const element = document.getElementById(id);
             element.addEventListener('input', updateText);
             element.addEventListener('change', updateText);
         });
 
-        // Uruchomienie funkcji na starcie, aby pokazać domyślny szablon
+        document.getElementById('output_mail').addEventListener('input', () => {
+            document.getElementById('output_mail').dataset.generatedValue = '';
+        });
+
         updateText();
     </script>
 
