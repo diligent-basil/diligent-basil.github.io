@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Konfiguracji</title>
+    <title>Helper Konfiguracji Menu.pl</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 760px; margin: 24px auto; padding: 16px; background-color: #f4f7f6; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1120px; margin: 24px auto; padding: 16px; background-color: #f4f7f6; color: #333; }
         h2 { margin-bottom: 14px; }
         .section { background: #fff; border: 1px solid #e1e6ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -18,7 +18,7 @@
         .checkbox-group label { display: inline; margin-bottom: 0; cursor: pointer; font-weight: 600; }
         input[type="text"], textarea { width: 100%; padding: 9px 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-        .output-box { margin-top: 18px; padding: 14px; background-color: #eef2f7; border-left: 5px solid #2b579a; border-radius: 4px; }
+        .output-box { margin-top: 18px; padding: 14px; background-color: #eef2f7; border-left: 5px solid #2b579a; border-radius: 4px; display: flex; flex-direction: column; }
         .output-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .output-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .copy-btn, .mail-btn, .clear-btn { padding: 7px 10px; border: none; border-radius: 4px; color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; }
@@ -30,100 +30,148 @@
         .clear-btn:hover { background: #8b2a2a; }
         .copy-btn:active, .mail-btn:active, .clear-btn:active { transform: translateY(1px); }
         .section-spacer { height: 10px; }
-        textarea { width: 100%; height: auto; min-height: 54px; margin-top: 8px; padding: 10px; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-family: monospace; font-size: 14px; resize: none; background-color: #fff; overflow: hidden; line-height: 1.35; }
+        textarea, input[type="text"] { width: 100%; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-size: 14px; background-color: #fff; }
+        textarea { margin-top: 8px; padding: 10px; font-family: monospace; resize: none; overflow: hidden; line-height: 1.35; }
         textarea.editable { resize: vertical; overflow: auto; min-height: 150px; }
+        textarea.paste-box { min-height: 430px; resize: vertical; }
+        input.editable-line { height: 40px; margin-top: 8px; padding: 9px 10px; }
         .hint { font-size: 12px; color: #666; margin-top: 2px; }
         .full { grid-column: 1 / -1; }
+        .top-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr); gap: 14px; align-items: stretch; }
+        .paste-panel { display: flex; flex-direction: column; }
+        .paste-panel textarea { flex: 1; }
+        .clear-note { font-size: 12px; color: #666; margin: 0; }
+        .bottom-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr); gap: 14px; align-items: stretch; }
+        .bottom-left, .bottom-right { display: flex; flex-direction: column; height: 100%; }
+        .bottom-right { background: #fff; border: 1px solid #e1e6ea; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; }
+        .bottom-left { min-height: 100%; }
+        .bottom-left .output-box { flex: 1; }
+        .bottom-right .mail-body { flex: 1; display: flex; flex-direction: column; }
+        .bottom-right textarea { flex: 1; min-height: 0; }
+        @media (max-width: 900px) { .top-layout, .bottom-layout { grid-template-columns: 1fr; } }
         @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .output-header { flex-direction: column; align-items: flex-start; } .section-header { align-items: flex-start; flex-direction: column; } }
     </style>
 </head>
 <body>
 
-    <h2>Helper Konfiguracji</h2>
+    <h2>Helper Konfiguracji Menu.pl</h2>
 
-    <div class="section">
-        <div class="section-header">
-            <div class="section-title">Dane podstawowe</div>
-            <button class="clear-btn" type="button" title="Nazwy kampanii dodane do maila zostaną zachowane" onclick="clearFields()">Wyczyść pola</button>
+    <div class="top-layout">
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">Dane podstawowe</div>
+                <button class="clear-btn" type="button" title="Czyści pola formularza oraz wklejany tekst formularza. Pole Mail zostaje zachowane." onclick="clearFields()">Wyczyść pola</button>
+            </div>
+            <div class="grid">
+                <div class="form-group full">
+                    <label for="rest_name">Nazwa restauracji</label>
+                    <input type="text" id="rest_name" placeholder="Nazwa">
+                </div>
+                <div class="form-group">
+                    <label for="client_id">ID Konta</label>
+                    <input type="text" id="client_id" placeholder="123">
+                </div>
+                <div class="form-group">
+                    <label for="loc_id">ID Lokalizacji</label>
+                    <input type="text" id="loc_id" placeholder="456">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon do restauracji</label>
+                    <input type="text" id="phone" placeholder="AAAAAAAAA">
+                </div>
+                <div class="form-group">
+                    <label for="campaign">Nr. kampanii Weylo</label>
+                    <input type="text" id="campaign" placeholder="BBBBBBBBB">
+                </div>
+                <div class="form-group">
+                    <label for="sim">Nr. karty SIM</label>
+                    <input type="text" id="sim" placeholder="CCCCCCCCC">
+                </div>
+                <div class="form-group checkbox-group full">
+                    <input type="checkbox" id="recording" checked>
+                    <label for="recording">Nagrywanie rozmów</label>
+                </div>
+                <div class="form-group checkbox-group full">
+                    <input type="checkbox" id="esim">
+                    <label for="esim">E-SIM</label>
+                </div>
+                <div class="form-group checkbox-group full">
+                    <input type="checkbox" id="queue">
+                    <label for="queue">Kolejka</label>
+                </div>
+            </div>
         </div>
-        <div class="grid">
-            <div class="form-group full">
-                <label for="rest_name">Nazwa restauracji</label>
-                <input type="text" id="rest_name" placeholder="Wklej nazwę">
+
+        <div class="section paste-panel">
+            <div class="section-header">
+                <div class="section-title">Wklej dane z formularza</div>
             </div>
-            <div class="form-group">
-                <label for="client_id">ID Konta</label>
-                <input type="text" id="client_id" placeholder="123">
-            </div>
-            <div class="form-group">
-                <label for="loc_id">ID Lokalizacji</label>
-                <input type="text" id="loc_id" placeholder="456">
-            </div>
-            <div class="form-group">
-                <label for="phone">Telefon do restauracji</label>
-                <input type="text" id="phone" placeholder="AAAAAAAAA">
-            </div>
-            <div class="form-group">
-                <label for="campaign">Nr. kampanii Weylo</label>
-                <input type="text" id="campaign" placeholder="BBBBBBBBB">
-            </div>
-            <div class="form-group">
-                <label for="sim">Nr. karty SIM</label>
-                <input type="text" id="sim" placeholder="CCCCCCCCC">
-            </div>
+            <textarea id="paste_input" class="paste-box" placeholder="Wklej tutaj cały tekst..."></textarea>
+            <div class="hint">Wklej pełny blok tekstu, a pola zostaną uzupełnione automatycznie.</div>
+            <p class="clear-note">Czyści się razem z przyciskiem <strong>Wyczyść pola</strong>.</p>
         </div>
     </div>
 
-    <div class="section options-group">
-        <div class="section-title">Opcje</div>
-        <div class="form-group checkbox-group">
-            <input type="checkbox" id="recording" checked>
-            <label for="recording">Nagrywanie rozmów</label>
-        </div>
-        <div class="form-group checkbox-group">
-            <input type="checkbox" id="esim">
-            <label for="esim">E-SIM</label>
-        </div>
-        <div class="form-group checkbox-group">
-            <input type="checkbox" id="queue">
-            <label for="queue">Kolejka</label>
-        </div>
-    </div>
+    <div class="bottom-layout">
+        <div class="bottom-left">
+            <div class="output-box">
+                <div class="output-header">
+                    <label for="output_code">Nazwa kampanii:</label>
+                    <div class="output-actions">
+                        <button class="mail-btn" type="button" onclick="addToMail()">Dodaj do maila</button>
+                        <button class="copy-btn" type="button" onclick="copyText('output_code', this)">Kopiuj</button>
+                    </div>
+                </div>
+                <input id="output_code" class="editable-line" type="text">
+                <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
+            </div>
 
-    <div class="output-box">
-        <div class="output-header">
-            <label for="output_code">Nazwa kampanii:</label>
-            <div class="output-actions">
-                <button class="mail-btn" type="button" onclick="addToMail()">Dodaj do maila</button>
-                <button class="copy-btn" type="button" onclick="copyText('output_code', this)">Kopiuj</button>
+            <div class="output-box" style="flex: 1;">
+                <div class="output-header">
+                    <label for="output_tone">Tekst wyboru tonowego:</label>
+                    <button class="copy-btn" type="button" onclick="copyText('output_tone', this)">Kopiuj</button>
+                </div>
+                <textarea id="output_tone" class="editable"></textarea>
+                <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
             </div>
         </div>
-        <textarea id="output_code" class="editable"></textarea>
-        <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
-    </div>
 
-    <div class="output-box">
-        <div class="output-header">
-            <label for="output_tone">Tekst wyboru tonowego:</label>
-            <button class="copy-btn" type="button" onclick="copyText('output_tone', this)">Kopiuj</button>
+        <div class="bottom-right">
+            <div class="section-header">
+                <div class="section-title">Mail</div>
+                <button class="copy-btn" type="button" onclick="copyText('output_mail', this)">Kopiuj</button>
+            </div>
+            <div class="mail-body">
+                <textarea id="output_mail" class="editable"></textarea>
+            </div>
+            <div class="hint">Mail jest edytowalny, a dodane nazwy kampanii zostają zachowane na czas sesji.</div>
         </div>
-        <textarea id="output_tone" class="editable"></textarea>
-        <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
     </div>
 
     <div class="section-spacer"></div>
 
-    <div class="section">
-        <div class="section-header">
-            <div class="section-title">Mail</div>
-            <button class="copy-btn" type="button" onclick="copyText('output_mail', this)">Kopiuj</button>
-        </div>
-        <textarea id="output_mail" class="editable"></textarea>
-        <div class="hint">Mail jest edytowalny, a dodane nazwy kampanii zostają zachowane.</div>
-    </div>
-
     <script>
         let preservedEmailNames = [];
+
+        function parsePastedData(text) {
+            const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
+            const getAfterLabel = (label) => {
+                const idx = lines.findIndex(line => line.toLowerCase() === label.toLowerCase());
+                return idx >= 0 && lines[idx + 1] ? lines[idx + 1] : '';
+            };
+
+            return {
+                restName: getAfterLabel('Nazwa lokalizacji'),
+                phone: getAfterLabel('Numer telefonu do usługi')
+            };
+        }
+
+        function fillFromPaste(text) {
+            const data = parsePastedData(text);
+            if (data.restName) document.getElementById('rest_name').value = data.restName;
+            if (data.phone) document.getElementById('phone').value = data.phone;
+            updateText();
+        }
 
         function updateText() {
             const restName = document.getElementById('rest_name').value.trim() || '[Nazwa Restauracji]';
@@ -178,6 +226,7 @@
             ['rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim'].forEach(id => {
                 document.getElementById(id).value = '';
             });
+            document.getElementById('paste_input').value = '';
             ['recording', 'esim', 'queue'].forEach(id => {
                 document.getElementById(id).checked = id === 'recording';
             });
@@ -185,6 +234,7 @@
         }
 
         function autoResize(el) {
+            if (el.tagName === 'INPUT') return;
             el.style.height = 'auto';
             el.style.height = el.scrollHeight + 'px';
         }
@@ -213,6 +263,9 @@
             element.addEventListener('input', updateText);
             element.addEventListener('change', updateText);
         });
+
+        const pasteBox = document.getElementById('paste_input');
+        pasteBox.addEventListener('input', () => fillFromPaste(pasteBox.value));
 
         document.getElementById('output_mail').addEventListener('input', () => {
             document.getElementById('output_mail').dataset.generatedValue = '';
