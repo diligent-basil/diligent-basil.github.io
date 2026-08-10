@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helper Konfiguracji Menu.pl</title>
+    <title>Helper Konfiguracji</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1120px; margin: 24px auto; padding: 16px; background-color: #f4f7f6; color: #333; }
         h2 { margin-bottom: 14px; }
+        .mode-toggle { display: flex; gap: 0; margin-bottom: 18px; border: 1px solid #2b579a; border-radius: 8px; overflow: hidden; max-width: 360px; }
+        .mode-toggle button { flex: 1; padding: 10px 14px; border: none; background: #fff; color: #2b579a; font-weight: 700; font-size: 14px; cursor: pointer; }
+        .mode-toggle button.active { background: #2b579a; color: #fff; }
+        .mode-toggle button:not(.active):hover { background: #eef2f7; }
         .section { background: #fff; border: 1px solid #e1e6ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
         .section-title { font-size: 14px; font-weight: 700; color: #2b579a; margin: 0; }
@@ -30,7 +34,7 @@
         .clear-btn:hover { background: #8b2a2a; }
         .copy-btn:active, .mail-btn:active, .clear-btn:active { transform: translateY(1px); }
         .section-spacer { height: 10px; }
-        textarea, input[type="text"] { width: 100%; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-size: 14px; background-color: #fff; }
+        textarea, input[type="text"] { width: 100%; box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px; font-size: 14px; background-color: #fff; transition: background-color 0.4s ease; }
         textarea { margin-top: 8px; padding: 10px; font-family: monospace; resize: none; overflow-y: auto; line-height: 1.35; }
         textarea.editable { resize: vertical; overflow: auto; min-height: 150px; }
         textarea.paste-box { height: 430px; resize: vertical; overflow-y: auto; }
@@ -53,9 +57,11 @@
     </style>
 </head>
 <body>
-
-    <h2>Helper Konfiguracji Menu.pl</h2>
-
+    <h2>Helper Konfiguracji</h2>
+    <div class="mode-toggle">
+        <button type="button" class="active" data-mode="menu" onclick="setMode('menu')">Menu.pl</button>
+        <button type="button" data-mode="sellway" onclick="setMode('sellway')">Sellway</button>
+    </div>
     <div class="top-layout">
         <div class="section">
             <div class="section-header">
@@ -64,7 +70,7 @@
             </div>
             <div class="grid">
                 <div class="form-group full">
-                    <label for="rest_name">Nazwa restauracji</label>
+                    <label for="rest_name">Nazwa</label>
                     <input type="text" id="rest_name" placeholder="Nazwa">
                 </div>
                 <div class="form-group">
@@ -76,7 +82,7 @@
                     <input type="text" id="loc_id" placeholder="456">
                 </div>
                 <div class="form-group">
-                    <label for="phone">Telefon do restauracji</label>
+                    <label for="phone">Telefon do usługi</label>
                     <input type="text" id="phone" placeholder="AAAAAAAAA">
                 </div>
                 <div class="form-group">
@@ -105,7 +111,6 @@
                 </div>
             </div>
         </div>
-
         <div class="section paste-panel">
             <div class="section-header">
                 <div class="section-title">Wklej dane z formularza</div>
@@ -115,7 +120,6 @@
             <p class="clear-note">Czyści się razem z przyciskiem <strong>Wyczyść pola</strong>.</p>
         </div>
     </div>
-
     <div class="bottom-layout">
         <div class="bottom-left">
             <div class="output-box">
@@ -123,83 +127,87 @@
                     <label for="output_code">Nazwa kampanii:</label>
                     <div class="output-actions">
                         <button class="mail-btn" type="button" onclick="addToMail()">Dodaj do maila</button>
-                        <button class="copy-btn" type="button" onclick="copyText('output_code', this)">Kopiuj</button>
                     </div>
                 </div>
                 <input id="output_code" class="editable-line" type="text">
                 <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
             </div>
-
             <div class="output-box" style="flex: 1;">
                 <div class="output-header">
                     <label for="output_tone">Tekst wyboru tonowego:</label>
-                    <button class="copy-btn" type="button" onclick="copyText('output_tone', this)">Kopiuj</button>
                 </div>
                 <textarea id="output_tone" class="editable"></textarea>
                 <div class="hint">Tekst aktualizuje się automatycznie przy wpisywaniu.</div>
             </div>
-
             <div class="output-box" style="flex: 1;">
                 <div class="output-header">
                     <label for="output_sms">Treść SMS:</label>
-                    <button class="copy-btn" type="button" onclick="copyText('output_sms', this)">Kopiuj</button>
                 </div>
                 <textarea id="output_sms" class="editable"></textarea>
                 <div class="hint">Generuje się automatycznie na podstawie Link SMS.</div>
             </div>
         </div>
-
         <div class="bottom-right">
             <div class="section-header">
                 <div class="section-title">Mail</div>
-                <button class="copy-btn" type="button" onclick="copyText('output_mail', this)">Kopiuj</button>
             </div>
             <div class="mail-body">
                 <textarea id="output_mail" class="editable"></textarea>
             </div>
-            <div class="hint">Mail jest edytowalny, a dodane nazwy kampanii zostają zachowane na czas sesji.</div>
+            <div class="hint">Mail jest edytowalny, a dodane nazwy kampanii zostają zachowane na czas sesji (niezależnie od wybranego trybu).</div>
         </div>
     </div>
-
     <div class="section-spacer"></div>
-
     <script>
         let preservedEmailNames = [];
-
+        let currentMode = 'menu';
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-toggle button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+            updateText();
+        }
         function parsePastedData(text) {
             const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
             const getAfterLabel = (label) => {
                 const idx = lines.findIndex(line => line.toLowerCase() === label.toLowerCase());
                 return idx >= 0 && lines[idx + 1] ? lines[idx + 1] : '';
             };
-
             return {
                 restName: getAfterLabel('Nazwa lokalizacji'),
                 phone: getAfterLabel('Numer telefonu do usługi')
             };
         }
-
         function fillFromPaste(text) {
             const data = parsePastedData(text);
             if (data.restName) document.getElementById('rest_name').value = data.restName;
             if (data.phone) document.getElementById('phone').value = data.phone;
             updateText();
         }
-
         function buildSmsText() {
             const link = document.getElementById('sms_link').value.trim();
             if (!link) return '';
             let finalLink = link;
-            if (link.includes('.menu.pl')) {
-                const uid = document.getElementById('client_id').value.trim() || '{UID}';
-                finalLink = finalLink.replace(/\/+$/, '');
-                finalLink += `/s/${uid}`;
+            if (currentMode === 'menu') {
+                if (link.includes('.menu.pl')) {
+                    finalLink = finalLink.replace(/\/+$/, '');
+                    finalLink += '/s/{UID}';
+                }
+                return `Aby zlozyc zamowienie online wejdz na ${finalLink}`;
             }
-            return `Aby zlozyc zamowienie online wejdz na ${finalLink}`;
+            finalLink = finalLink.replace(/\/$/, '');
+            finalLink += '#{UID}';
+            return `Aby XXX online wejdz na ${finalLink}`;
         }
-
+        function buildToneText(restName) {
+            if (currentMode === 'menu') {
+                return `Witamy w restauracji ${restName}.\nJeżeli chcesz zamówić online, wybierz jeden, a jeżeli chcesz porozmawiać z nami, wybierz dwa.`;
+            }
+            return `Witamy w ${restName}.\nJeżeli chcesz XXX online, wybierz jeden, a jeżeli chcesz porozmawiać z nami, wybierz dwa.`;
+        }
         function updateText() {
-            const restName = document.getElementById('rest_name').value.trim() || '[Nazwa Restauracji]';
+            const restName = document.getElementById('rest_name').value.trim() || '[Nazwa]';
             const clientId = document.getElementById('client_id').value.trim() || 'X';
             const locId = document.getElementById('loc_id').value.trim() || 'Y';
             const phone = document.getElementById('phone').value.trim() || 'AAAAAAAAA';
@@ -208,9 +216,8 @@
             const recPrefix = document.getElementById('recording').checked ? ' NR' : ' BNR';
             const esimText = document.getElementById('esim').checked ? ' esim' : '';
             const queueText = document.getElementById('queue').checked ? ' K' : '';
-
             document.getElementById('output_code').value = `K${clientId} L${locId}${recPrefix} ${phone}-${campaign}-${sim}${esimText}${queueText}`;
-            document.getElementById('output_tone').value = `Witamy w restauracji ${restName}.\nJeżeli chcesz zamówić online, wybierz jeden<break time="0.5s"/>, a jeżeli chcesz porozmawiać z nami...?, wybierz dwa.`;
+            document.getElementById('output_tone').value = buildToneText(restName);
             document.getElementById('output_sms').value = buildSmsText();
             updateMailOutput();
             autoResize(document.getElementById('output_code'));
@@ -218,12 +225,10 @@
             autoResize(document.getElementById('output_sms'));
             autoResize(document.getElementById('output_mail'));
         }
-
         function updateMailOutput() {
             const intro = preservedEmailNames.length === 1
                 ? 'Proszę dla kampanii z poniższą nazwą ustawić przekazywanie numeru źródłowego'
                 : 'Proszę dla kampanii z poniższymi nazwami ustawić przekazywanie numeru źródłowego';
-
             const body = [
                 'Dzień dobry',
                 '',
@@ -233,7 +238,6 @@
                 '',
                 'Pozdrawiam,'
             ].join('\n').replace(/\n{3,}/g, '\n\n').trimEnd();
-
             const mailBox = document.getElementById('output_mail');
             if (mailBox.value.trim() === '' || mailBox.value === mailBox.dataset.generatedValue) {
                 mailBox.value = body;
@@ -241,14 +245,12 @@
             mailBox.dataset.generatedValue = body;
             autoResize(mailBox);
         }
-
         function addToMail() {
             const campaignName = document.getElementById('output_code').value.trim();
             if (!campaignName) return;
             if (!preservedEmailNames.includes(campaignName)) preservedEmailNames.push(campaignName);
             updateMailOutput();
         }
-
         function clearFields() {
             ['rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim', 'sms_link'].forEach(id => {
                 document.getElementById(id).value = '';
@@ -259,16 +261,19 @@
             });
             updateText();
         }
-
         function autoResize(el) {
             if (el.tagName === 'INPUT' || el.id === 'paste_input') return;
             el.style.height = 'auto';
             el.style.height = el.scrollHeight + 'px';
         }
-
+        function flashField(el, success) {
+            const flashColor = success ? '#c9f2c9' : '#f2c9c9';
+            el.style.backgroundColor = flashColor;
+            setTimeout(() => { el.style.backgroundColor = ''; }, 400);
+        }
         function copyText(id, button) {
-            const text = document.getElementById(id).value;
             const textarea = document.getElementById(id);
+            const text = textarea.value;
             textarea.focus();
             textarea.select();
             let success = false;
@@ -277,29 +282,39 @@
                 navigator.clipboard.writeText(text);
                 success = true;
             }
-            const old = button.textContent;
-            button.textContent = success ? 'Skopiowano' : 'Nie udało się';
-            setTimeout(() => button.textContent = old, 1000);
+            if (button) {
+                const old = button.textContent;
+                button.textContent = success ? 'Skopiowano' : 'Nie udało się';
+                setTimeout(() => button.textContent = old, 1000);
+            } else {
+                flashField(textarea, success);
+            }
             window.getSelection().removeAllRanges();
             textarea.blur();
         }
-
         const inputIds = ['rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim', 'sms_link', 'recording', 'esim', 'queue'];
         inputIds.forEach(id => {
             const element = document.getElementById(id);
             element.addEventListener('input', updateText);
             element.addEventListener('change', updateText);
         });
-
         const pasteBox = document.getElementById('paste_input');
         pasteBox.addEventListener('input', () => fillFromPaste(pasteBox.value));
-
         document.getElementById('output_mail').addEventListener('input', () => {
             document.getElementById('output_mail').dataset.generatedValue = '';
         });
-
+        const copyOnDblClickIds = [
+            'output_code', 'output_tone', 'output_sms', 'output_mail',
+            'rest_name', 'client_id', 'loc_id', 'phone', 'campaign', 'sim', 'sms_link'
+        ];
+        copyOnDblClickIds.forEach(id => {
+            const element = document.getElementById(id);
+            element.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                copyText(id);
+            });
+        });
         updateText();
     </script>
-
 </body>
 </html>
