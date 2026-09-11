@@ -191,13 +191,17 @@
             const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
             return {
                 restName: extractField(lines, 'Nazwa lokalizacji'),
-                phone: extractField(lines, 'Numer telefonu do usługi')
+                phone: extractField(lines, 'Numer telefonu do usługi'),
+                clientId: extractField(lines, 'ID Konta'),
+                locId: extractField(lines, 'ID Lokalizacji')
             };
         }
         function fillFromPaste(text) {
             const data = parsePastedData(text);
             if (data.restName) document.getElementById('rest_name').value = data.restName;
             if (data.phone) document.getElementById('phone').value = data.phone;
+            if (data.clientId) document.getElementById('client_id').value = data.clientId;
+            if (data.locId) document.getElementById('loc_id').value = data.locId;
             updateText();
         }
         function buildSmsText() {
