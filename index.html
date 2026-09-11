@@ -169,15 +169,29 @@
             });
             updateText();
         }
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+        // Handles both the old paste format (label alone on a line, value on the
+        // next line) and the forms.app export format (label followed by a colon,
+        // with the value either right after the colon on the same line, or on
+        // the next non-empty line).
+        function extractField(lines, label) {
+            const re = new RegExp('^' + escapeRegex(label) + '\\s*:?\\s*(.*)$', 'i');
+            for (let i = 0; i < lines.length; i++) {
+                const m = lines[i].match(re);
+                if (m) {
+                    if (m[1] && m[1].trim()) return m[1].trim();
+                    return lines[i + 1] ? lines[i + 1].trim() : '';
+                }
+            }
+            return '';
+        }
         function parsePastedData(text) {
             const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-            const getAfterLabel = (label) => {
-                const idx = lines.findIndex(line => line.toLowerCase() === label.toLowerCase());
-                return idx >= 0 && lines[idx + 1] ? lines[idx + 1] : '';
-            };
             return {
-                restName: getAfterLabel('Nazwa lokalizacji'),
-                phone: getAfterLabel('Numer telefonu do usługi')
+                restName: extractField(lines, 'Nazwa lokalizacji'),
+                phone: extractField(lines, 'Numer telefonu do usługi')
             };
         }
         function fillFromPaste(text) {
