@@ -236,7 +236,8 @@
             const recPrefix = document.getElementById('recording').checked ? ' NR' : ' BNR';
             const esimText = document.getElementById('esim').checked ? ' esim' : '';
             const queueText = document.getElementById('queue').checked ? ' K' : '';
-            document.getElementById('output_code').value = `K${clientId} L${locId}${recPrefix} ${phone}-${campaign}-${sim}${esimText}${queueText}`;
+            const modePrefix = currentMode === 'menu' ? 'M ' : '';
+            document.getElementById('output_code').value = `${modePrefix}K${clientId} L${locId}${recPrefix} ${phone}-${campaign}-${sim}${esimText}${queueText}`;
             document.getElementById('output_tone').value = buildToneText(restName);
             document.getElementById('output_sms').value = buildSmsText();
             updateMailOutput();
